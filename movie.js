@@ -1,28 +1,29 @@
-const {parseCSVRow} = require("./movieUtils.js");
+const { getMovieByTitle } = require("./movieUtils");
+const { readCSVFile } = require("./lib/files");
 
-const fs = require("fs");
-const path = require("path");
-
+// Recibimos el input del usuario
 const inputTitle = process.argv[2];
-console.log(inputTitle);
-
-const csvFilePath = path.join(__dirname, "data", "movies.csv");
-const csvData = fs.readFileSync(csvFilePath, "utf8");
-
-
-const lines = csvData.split("\n");
-const headers = parseCSVRow(lines[0]);
-
-let movie = {};
-
-for (let i = 1; i < lines.length; i++) {
-	const values = parseCSVRow(lines[i]);
-	if (values[1] === inputTitle) {
-		headers.forEach((header, index) => {
-			movie[header] = values[index];
-		});
-		break;
-	}
+if (!inputTitle) {
+    console.log("Por favor, proporciona un título de película como argumento.");
+    process.exit(1); // Salir con un código de error
 }
 
-console.log(movie);
+// Mostrar el título proporcionado
+console.log(`Buscando la película: ${inputTitle}`);
+
+// Leer el archivo CSV
+try {
+    const csvMovies = readCSVFile("data/movies.csv");
+
+    // Buscar la película por título
+    const movie = getMovieByTitle(inputTitle, csvMovies);
+
+    if (movie) {
+        console.log("Película encontrada:", movie);
+    } else {
+        console.log("No se encontró ninguna película con ese título.");
+    }
+} catch (error) {
+    console.error("Error al leer el archivo CSV o procesar los datos:", error.message);
+    process.exit(1); // Salir con un código de error
+}
