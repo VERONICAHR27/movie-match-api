@@ -25,7 +25,11 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Middleware de manejo de errores
 app.use(errorHandler);
 
-// Iniciar el servidor
-app.listen(PORT, () => {
+// Iniciar el servidor solo si no está en un entorno manejado (como Vercel)
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
+  });
+}
+
+export default app; // Exportar la aplicación para que Vercel la maneje

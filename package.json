@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "movie match api",
   "type": "module",
-  "main": "movie.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "search": "node movie.js",
