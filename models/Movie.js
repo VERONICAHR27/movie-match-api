@@ -1,5 +1,16 @@
-//const { readCSVFile } = require("../lib/files");
-import { readCSVFile } from "../lib/files.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Obtener __dirname en ES6
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Added readCSVFile function from files.js
+function readCSVFile(relative_path_filename) {
+    const csvFilePath = path.join(__dirname, "../", relative_path_filename);
+    return fs.readFileSync(csvFilePath, "utf8");
+}
 
 function Movie(id, title, year, genre, director, actors, plot, imdb_rating, runtime_minutes) {
     this.id = id; // ID de la película
@@ -160,7 +171,5 @@ Movie.getByCriteria = function(criteria) {
     });
 };
 
-
-
-	
-export default Movie; // Exportar la clase Movie
+export { readCSVFile, Movie }; // Exporting readCSVFile along with existing exports
+export default Movie; // Exportar Movie como exportación por defecto

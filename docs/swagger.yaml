@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Movie Match API
+  version: 1.0.0
+  description: API para gestionar películas y coincidencias.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api:
+    get:
+      summary: Mensaje de bienvenida
+      description: Devuelve un mensaje de bienvenida indicando que el servidor está funcionando.
+      responses:
+        '200':
+          description: Mensaje de bienvenida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Bienvenido a la API de películas. El servidor está corriendo correctamente."
+  /api/movies:
+    get:
+      summary: Obtener todas las películas
+      description: Devuelve una lista de todas las películas disponibles o permite filtrar por género, nombre o año.
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Nombre parcial de la película.
+          schema:
+            type: string
+        - name: year
+          in: query
+          required: false
+          description: Año de lanzamiento de la película.
+          schema:
+            type: string
+        - name: genre
+          in: query
+          required: false
+          description: Género de la película.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de películas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "tt0111161"
+                    title:
+                      type: string
+                      example: "The Shawshank Redemption"
+                    year:
+                      type: string
+                      example: "1994"
+                    genre:
+                      type: string
+                      example: "Drama"
+        '404':
+          description: No se encontraron películas que coincidan con los criterios.
+  /api/random:
+    get:
+      summary: Obtener una película al azar
+      description: Devuelve una película seleccionada al azar de la base de datos.
+      responses:
+        '200':
+          description: Película aleatoria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "tt0468569"
+                  title:
+                    type: string
+                    example: "The Dark Knight"
+                  year:
+                    type: string
+                    example: "2008"
+                  genre:
+                    type: string
+                    example: "Action, Crime, Drama"
+  /api/movies/{identifier}:
+    get:
+      summary: Obtener una película por ID o nombre
+      description: Devuelve los detalles de una película específica según su ID o nombre.
+      parameters:
+        - name: identifier
+          in: path
+          required: true
+          description: ID único o nombre de la película.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la película
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "tt0111161"
+                  title:
+                    type: string
+                    example: "The Shawshank Redemption"
+                  year:
+                    type: string
+                    example: "1994"
+                  genre:
+                    type: string
+                    example: "Drama"
+        '404':
+          description: Película no encontrada.
+  
