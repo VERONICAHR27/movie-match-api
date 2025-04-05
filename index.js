@@ -7,7 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import dotenv from "dotenv";
 
-require('dotenv').config();// Cargar las variables de entorno desde el archivo .env
+dotenv.config(); // Cargar variables de entorno desde .env
 
 const swaggerDocument = YAML.load("./docs/swagger.yaml"); 
 
