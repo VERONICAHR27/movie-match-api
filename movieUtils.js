@@ -1,4 +1,4 @@
-const { readCSVFile } = require("./lib/files");
+/*const { readCSVFile } = require("./lib/files");
 
 function parseCSVRow(row) {
     const result = [];
@@ -87,3 +87,4 @@ function getMovieByIdentifier(identifier) {
 }
 
 module.exports = { getAllMovies, getMoviesByGenre, getRandomMovie, getMovieByIdentifier, getMovieByTitle };
+*/

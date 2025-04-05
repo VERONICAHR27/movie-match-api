@@ -2,15 +2,20 @@
   "name": "movie-match-api",
   "version": "1.0.0",
   "description": "movie match api",
+  "type": "module", 
   "main": "movie.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "search": "node movie.js"
+    "search": "node movie.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.2.0",
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }

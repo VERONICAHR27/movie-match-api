@@ -1,4 +1,4 @@
-const { getMovieByTitle } = require("./movieUtils");
+/*const { getMovieByTitle } = require("./movieUtils");
 const { readCSVFile } = require("./lib/files");
 
 // Recibimos el input del usuario
@@ -26,4 +26,4 @@ try {
 } catch (error) {
     console.error("Error al leer el archivo CSV o procesar los datos:", error.message);
     process.exit(1); // Salir con un código de error
-}
+}*/
