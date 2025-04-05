@@ -5,11 +5,14 @@ import  cors  from "./middlewares/cors.js";
 import { errorHandler } from "./middlewares/errorHandler.js"; 
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
+import dotenv from "dotenv";
+
+dotenv.config(); // Cargar variables de entorno desde .env
 
 const swaggerDocument = YAML.load("./docs/swagger.yaml"); 
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Usar el puerto definido en .env o el puerto 3000 por defecto
 
 app.use(logger); // Activar el middleware de logging
 app.use(cors); // Activar el middleware de CORS
