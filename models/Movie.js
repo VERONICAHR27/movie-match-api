@@ -107,7 +107,7 @@ Movie.getByIdOrTitle = function(identifier) {
     return movie || null; // Devolver la película encontrada o null si no existe
 };
 
-Movie.getByGenre = function(genre) {
+/*Movie.getByGenre = function(genre) {
     const movies = Movie.getAll(); // Obtener todas las películas
     if (!genre) {
         return movies; // Si no se proporciona un género, devolver todas las películas
@@ -123,10 +123,44 @@ Movie.getByGenre = function(genre) {
         // Verifica si el género proporcionado está en la lista de géneros de la película
         return movieGenres.includes(genre.toLowerCase());
     });
+};*/
+
+// Obtener películas por múltiples criterios (nombre, año, género)
+// Esta función permite filtrar películas por nombre, año y género
+Movie.getByCriteria = function(criteria) {
+    const movies = Movie.getAll(); // Obtener todas las películas
+
+    return movies.filter((movie) => {
+        let matches = true;
+
+        // Filtrar por nombre parcial si el criterio 'name' está presente
+        if (criteria.name) {
+            const nameLower = criteria.name.toLowerCase();
+            matches = matches && movie.title.toLowerCase().includes(nameLower);
+        }
+
+        // Filtrar por año si el criterio 'year' está presente
+        if (criteria.year) {
+            matches = matches && movie.year === criteria.year;
+        }
+
+        // Filtrar por género si el criterio 'genre' está presente
+        if (criteria.genre) {
+            if (Array.isArray(movie.genre)) {
+                matches = matches && movie.genre.some(g => g.toLowerCase() === criteria.genre.toLowerCase());
+            } else if (typeof movie.genre === "string") {
+                const genres = movie.genre.toLowerCase().split(",").map(g => g.trim());
+                matches = matches && genres.includes(criteria.genre.toLowerCase());
+            } else {
+                matches = false;
+            }
+        }
+
+        return matches;
+    });
 };
 
 
 
-
-		
+	
 export default Movie; // Exportar la clase Movie
