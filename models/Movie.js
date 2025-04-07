@@ -85,6 +85,11 @@ Movie.getAll = function() {
             movie[header] = values[index];
         });
 
+        // Convertir runtime_minutes a número
+        if (movie.runtime_minutes) {
+            movie.runtime_minutes = parseInt(movie.runtime_minutes, 10);
+        }
+
         // Parse fields specified in getFieldsToParseArray
         const fieldsToParse = movie.getFieldsToParseArray();
         fieldsToParse.forEach((field) => {
@@ -118,25 +123,6 @@ Movie.getByIdOrTitle = function(identifier) {
     return movie || null; // Devolver la película encontrada o null si no existe
 };
 
-/*Movie.getByGenre = function(genre) {
-    const movies = Movie.getAll(); // Obtener todas las películas
-    if (!genre) {
-        return movies; // Si no se proporciona un género, devolver todas las películas
-    }
-    return movies.filter((movie) => {
-        // Verifica si el campo genre es válido y convierte a minúsculas
-        if (typeof movie.genre !== "string") {
-            console.warn(`El campo 'genre' no es una cadena en la película:`, movie);
-            return false; // Ignorar películas con un campo 'genre' inválido
-        }
-        // Convierte los géneros de la película en un array y elimina espacios adicionales
-        const movieGenres = movie.genre.toLowerCase().split(",").map(g => g.trim());
-        // Verifica si el género proporcionado está en la lista de géneros de la película
-        return movieGenres.includes(genre.toLowerCase());
-    });
-};*/
-
-// Obtener películas por múltiples criterios (nombre, año, género)
 // Esta función permite filtrar películas por nombre, año y género
 Movie.getByCriteria = function(criteria) {
     const movies = Movie.getAll(); // Obtener todas las películas
@@ -155,6 +141,14 @@ Movie.getByCriteria = function(criteria) {
             matches = matches && movie.year === criteria.year;
         }
 
+        // Filtrar por rango de años si 'fromYear' o 'toYear' están presentes
+        if (criteria.fromYear) {
+            matches = matches && parseInt(movie.year) >= parseInt(criteria.fromYear);
+        }
+        if (criteria.toYear) {
+            matches = matches && parseInt(movie.year) <= parseInt(criteria.toYear);
+        }
+
         // Filtrar por género si el criterio 'genre' está presente
         if (criteria.genre) {
             if (Array.isArray(movie.genre)) {
@@ -167,6 +161,7 @@ Movie.getByCriteria = function(criteria) {
             }
         }
 
+        
         return matches;
     });
 };

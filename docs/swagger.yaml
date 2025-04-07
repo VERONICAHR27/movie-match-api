@@ -21,10 +21,12 @@ paths:
                   message:
                     type: string
                     example: "Bienvenido a la API de películas. El servidor está corriendo correctamente."
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /api/movies:
     get:
       summary: Obtener todas las películas
-      description: Devuelve una lista de todas las películas disponibles o permite filtrar por género, nombre o año.
+      description: Devuelve una lista de todas las películas disponibles o permite filtrar por género, nombre, año, rango de años o duración mínima.
       parameters:
         - name: name
           in: query
@@ -44,28 +46,52 @@ paths:
           description: Género de la película.
           schema:
             type: string
+        - name: fromYear
+          in: query
+          required: false
+          description: Año inicial del rango.
+          schema:
+            type: string
+        - name: toYear
+          in: query
+          required: false
+          description: Año final del rango.
+          schema:
+            type: string
       responses:
         '200':
           description: Lista de películas
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: "tt0111161"
-                    title:
-                      type: string
-                      example: "The Shawshank Redemption"
-                    year:
-                      type: string
-                      example: "1994"
-                    genre:
-                      type: string
-                      example: "Drama"
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 100
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 10
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "tt0111161"
+                        title:
+                          type: string
+                          example: "The Shawshank Redemption"
+                        year:
+                          type: string
+                          example: "1994"
+                        genre:
+                          type: string
+                          example: "Drama"
         '404':
           description: No se encontraron películas que coincidan con los criterios.
   /api/random:
@@ -125,4 +151,52 @@ paths:
                     example: "Drama"
         '404':
           description: Película no encontrada.
-  
+  /api/backup/backup:
+    post:
+      summary: Respaldar los datos
+      description: Crea un respaldo de la base de datos actual.
+      responses:
+        '200':
+          description: Respaldo realizado con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Respaldo realizado con éxito."
+        '500':
+          description: Error al realizar el respaldo.
+
+  /api/backup/restore:
+    post:
+      summary: Restaurar los datos
+      description: Restaura la base de datos desde el último respaldo.
+      responses:
+        '200':
+          description: Restauración realizada con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Restauración realizada con éxito."
+        '404':
+          description: No se encontró un respaldo para restaurar.
+        '500':
+          description: Error al realizar la restauración.
+components:
+  responses:
+    TooManyRequests:
+      description: Se excedió el límite de solicitudes permitido.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Demasiadas solicitudes desde esta IP, por favor intenta nuevamente después de 15 minutos."
